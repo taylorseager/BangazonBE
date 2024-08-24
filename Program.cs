@@ -14,7 +14,7 @@ builder.Services.AddSwaggerGen();
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 // allows our api endpoints to access the database through Entity Framework Core
-builder.Services.AddNpgsql<CreekRiverDbContext>(builder.Configuration["CreekRiverDbConnectionString"]);
+builder.Services.AddNpgsql<BangazonDbContext>(builder.Configuration["BangazonDbConnectionString"]);
 
 // Set the JSON serializer options
 builder.Services.Configure<JsonOptions>(options =>
@@ -32,6 +32,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// GET All Products
+app.MapGet("api/products", (BangazonDbContext db) =>
+{
+    return db.Products.ToList();
+});
 
 
 app.Run();
