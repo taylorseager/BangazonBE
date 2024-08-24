@@ -54,5 +54,11 @@ app.MapGet("api/products/{id}", (BangazonDbContext db, int id) =>
     }
 });
 
+app.MapGet("api/orders/{id}", (BangazonDbContext db, int id) =>
+{
+    var selectedOrder = db.Orders.Include(o => o.Id).Single(o => o.Id == id);
+
+    return Results.Ok(selectedOrder);
+});
 
 app.Run();
