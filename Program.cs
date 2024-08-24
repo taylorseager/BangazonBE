@@ -39,6 +39,7 @@ app.MapGet("api/products", (BangazonDbContext db) =>
     return db.Products.ToList();
 });
 
+// GET single product
 app.MapGet("api/products/{id}", (BangazonDbContext db, int id) =>
 {
     try
@@ -54,11 +55,25 @@ app.MapGet("api/products/{id}", (BangazonDbContext db, int id) =>
     }
 });
 
+// GET single order
 app.MapGet("api/orders/{id}", (BangazonDbContext db, int id) =>
 {
     var selectedOrder = db.Orders.Include(o => o.Id).Single(o => o.Id == id);
 
     return Results.Ok(selectedOrder);
+});
+
+// Remove product from cart
+app.MapDelete("/api/order/{id}", (BangazonDbContext db, int id) =>
+{
+    Campsite campsite = db.Campsites.SingleOrDefault(campsite => campsite.Id == id);
+    if (campsite == null)
+    {
+        return Results.NotFound();
+    }
+    db.Campsites.Remove(campsite);
+    db.SaveChanges();
+    return Results.NoContent();
 });
 
 app.Run();
