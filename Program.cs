@@ -39,5 +39,20 @@ app.MapGet("api/products", (BangazonDbContext db) =>
     return db.Products.ToList();
 });
 
+app.MapGet("api/products/{id}", (BangazonDbContext db, int id) =>
+{
+    try
+    {
+        var selectedProduct = db.Products.Include(p => p.Id).Single(p => p.Id == id);
+
+        return Results.Ok(selectedProduct);
+    }
+
+    catch (Exception)
+    {
+        return Results.NotFound();
+    }
+});
+
 
 app.Run();
