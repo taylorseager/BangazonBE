@@ -95,6 +95,8 @@ app.MapGet("/checkUserStatus/{uid}", (BangazonDbContext db, string uid) =>
     return Results.Ok(user);
 });
 
+
+// GET single user
 app.MapGet("/api/user/{id}", (BangazonDbContext db, string id) =>
 {
     User user = db.Users.FirstOrDefault(u => u.Id == id);
