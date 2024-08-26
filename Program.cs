@@ -64,16 +64,45 @@ app.MapGet("api/orders/{id}", (BangazonDbContext db, int id) =>
 });
 
 // Remove product from cart
-app.MapDelete("/api/order/{id}", (BangazonDbContext db, int id) =>
+app.MapDelete("/api/orderitem/{id}", (BangazonDbContext db, int id) =>
 {
-    Campsite campsite = db.Campsites.SingleOrDefault(campsite => campsite.Id == id);
-    if (campsite == null)
+    OrderItem orderItem = db.OrderItems.FirstOrDefault(oi => oi.Id == id);
+    if (orderItem == null)
     {
         return Results.NotFound();
     }
-    db.Campsites.Remove(campsite);
+    db.OrderItems.Remove(orderItem);
     db.SaveChanges();
     return Results.NoContent();
+});
+
+// ADD product to cart
+app.MapPost("/api/orderitem", (BangazonDbContext db, OrderItem orderItem) =>
+{
+    db.OrderItems.Add(orderItem);
+    db.SaveChanges();
+    return Results.Created($"/api/orderitem/{orderItem.Id}", orderItem);
+});
+
+// Check users
+app.MapGet("/checkUserStatus/{uid}", (BangazonDbContext db, string uid) =>
+{
+    var user = db.Users.Where(u => u.Id == uid).ToList();
+    if (uid == null)
+    {
+        return Results.NotFound();
+    }
+    return Results.Ok(user);
+});
+
+app.MapGet("/api/user/{id}", (BangazonDbContext db, string id) =>
+{
+    User user = db.Users.FirstOrDefault(u => u.Id == id);
+    if (id == null)
+    {
+        return Results.NotFound();
+    }
+    return Results.Ok(user);
 });
 
 app.Run();
