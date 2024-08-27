@@ -23,7 +23,7 @@ public class BangazonDbContext : DbContext
        {
            new User
            {
-               Id = 1,
+               Id = "1",
                Image = "",
                Seller = false
            }
