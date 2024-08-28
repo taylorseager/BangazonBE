@@ -42,23 +42,16 @@ app.MapGet("api/products", (BangazonDbContext db) =>
 // GET single product
 app.MapGet("api/products/{id}", (BangazonDbContext db, int id) =>
 {
-    try
-    {
-        var selectedProduct = db.Products.Include(p => p.Id).Single(p => p.Id == id);
+        var selectedProduct = db.Products.FirstOrDefault(p => p.Id == id);
 
         return Results.Ok(selectedProduct);
-    }
-
-    catch (Exception)
-    {
-        return Results.NotFound();
-    }
+  
 });
 
 // GET single order
 app.MapGet("api/orders/{id}", (BangazonDbContext db, int id) =>
 {
-    var selectedOrder = db.Orders.Include(o => o.Id).Single(o => o.Id == id);
+    var selectedOrder = db.Orders.FirstOrDefault(o => o.Id == id);
 
     return Results.Ok(selectedOrder);
 });
