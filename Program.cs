@@ -67,6 +67,29 @@ app.MapGet("api/orders/{id}", (BangazonDbContext db, int id) =>
     return Results.Ok(selectedOrder);
 });
 
+// GET create single order
+app.MapPost("api/orders", (BangazonDbContext db, Order order) =>
+{
+    db.Orders.Add(order);
+    var returnedOrder = db.SaveChanges();
+    return Results.Ok(returnedOrder);
+});
+
+// GET single order by User ID
+app.MapGet("api/orders/user/{userId}", (BangazonDbContext db, string userId) =>
+{
+    var selectedOrder = db.Orders.FirstOrDefault(o => o.UserId == userId);
+    Console.WriteLine("blahhh"+ selectedOrder);
+    if (selectedOrder == null)
+    {
+        return Results.Ok("Not Found");
+    }
+    else
+    {
+        return Results.Ok(selectedOrder);
+    }
+});
+
 // Remove product from cart
 app.MapDelete("/api/orderitem/{id}", (BangazonDbContext db, int id) =>
 {
@@ -85,7 +108,7 @@ app.MapPost("/api/orderitem", (BangazonDbContext db, OrderItem orderItem) =>
 {
     db.OrderItems.Add(orderItem);
     db.SaveChanges();
-    return Results.Created($"/api/orderitem/{orderItem.Id}", orderItem);
+    return Results.Ok("added to cart");
 });
 
 // Check users

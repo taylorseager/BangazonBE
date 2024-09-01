@@ -5,6 +5,6 @@ public class Order
 {
     public int Id { get; set; }
     [Required]
-    public int UserId { get; set; } // Foreign Key to User
+    public string UserId { get; set; } // Foreign Key to User
 }
 
